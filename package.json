@@ -1,0 +1,12 @@
+{
+  "name": "hypha-matrix-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.1",
+    "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.0",
+    "ws": "^7.2.1"
+  }
+}
