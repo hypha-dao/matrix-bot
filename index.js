@@ -3,8 +3,9 @@ global.WebSocket = require('ws')
 
 require('dotenv').config();
 const axios = require('axios').default;
-const roomId = process.env.roomId;
-const baseUrl = process.env.baseUrl;
+const roomId = process.env.ROOM_ID;
+const baseUrl = process.env.BASE_URL;
+const matrix_token = process.env.MATRIX_TOKEN;
 
 const telosTrxStatus = () => {
   const messageBody = {
@@ -30,7 +31,7 @@ const telosTrxStatus = () => {
       method: 'put',
       url: `${baseUrl}/${roomId}/send/m.room.message/${trxId}`,
       params: {
-        access_token: process.env.matrix_token
+        access_token: matrix_token
       },
       data: {
         msgtype: 'm.text',
