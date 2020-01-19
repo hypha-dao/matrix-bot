@@ -1,7 +1,7 @@
 global.fetch = require('node-fetch')
 global.WebSocket = require('ws')
 
-require('dotenv').config();
+require('dotenv').config({ path: '../hyphabot.cfg' });
 const axios = require('axios').default;
 const roomId = process.env.ROOM_ID;
 const baseUrl = process.env.BASE_URL;
