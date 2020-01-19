@@ -16,4 +16,4 @@ deploy:
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
     - ssh -o StrictHostKeyChecking=no ubuntu@"$SERVER" 'rm -rf /home/ubuntu/hypha-telos-bot/*'
-    - scp -P22 -r . ubuntu@"$SERVER":/home/ubuntu/hypha-telos-bot
+    - scp -P22 -r * ubuntu@"$SERVER":/home/ubuntu/hypha-telos-bot
