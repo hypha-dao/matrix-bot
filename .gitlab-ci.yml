@@ -15,7 +15,7 @@ deploy:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
-    - ssh -o StrictHostKeyChecking=no ubuntu@"$SERVER" 'npm install pm2 -g && rm -rf /home/ubuntu/hypha-telos-bot/*'
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$SERVER" 'yarn add pm2 -g && rm -rf /home/ubuntu/hypha-telos-bot/*'
     - scp -P22 -r * ubuntu@"$SERVER":/home/ubuntu/hypha-telos-bot
     - ssh -o StrictHostKeyChecking=no ubuntu@"$SERVER" 'cd /home/ubuntu/hypha-telos-bot && yarn && export ROOM_ID="$ROOM_ID" && export BASE_URL="$BASE_URL" && export MATRIX_TOKEN="$MATRIX_TOKEN" && pm2 restart /home/ubuntu/hypha-telos-bot/index.js'
     # - ssh -o StrictHostKeyChecking=no ubuntu@"$SERVER" 'pm2 restart /home/ubuntu/hypha-telos-bot/index.js'
