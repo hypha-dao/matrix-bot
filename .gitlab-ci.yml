@@ -15,5 +15,5 @@ deploy:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - ssh-add <(echo "$PRIVATE_KEY")
-    - ssh -o StrictHostKeyChecking=no user@"$QA_SERVER" 'rm -rf /home/ubuntu/hypha-telos-bot/*'
+    - ssh -o StrictHostKeyChecking=no ubuntu@"$SERVER" 'rm -rf /home/ubuntu/hypha-telos-bot/*'
     - scp -P22 -r . ubuntu@"$SERVER":/home/ubuntu/hypha-telos-bot
