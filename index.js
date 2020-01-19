@@ -13,7 +13,7 @@ const telosTrxStatus = () => {
     "event": "subscribe",
     "type": "get_actions",
     "data": {
-      "account": "eosio.token",
+      "account": "dao.hypha",
       "actions": []
     }
   }
