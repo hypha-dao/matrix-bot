@@ -2,6 +2,7 @@
   "name": "hypha-matrix-bot",
   "version": "1.0.0",
   "main": "index.js",
+  "author": "Hypha",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.1",

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hypha-matrix-bot-svc
+spec:
+  ports:
+  selector:
+    app: hypha-matrix-bot
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376

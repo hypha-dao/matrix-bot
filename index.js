@@ -1,11 +1,18 @@
 global.fetch = require('node-fetch')
 global.WebSocket = require('ws')
 
-require('dotenv').config({ path: '../hyphabot.cfg' });
+require('dotenv').config({ path: '.env' });
 const axios = require('axios').default;
 const roomId = process.env.ROOM_ID;
 const baseUrl = process.env.BASE_URL;
 const matrix_token = process.env.MATRIX_TOKEN;
+const account = process.env.ACCOUNT;
+
+console.log ('Application Configuration:');
+console.log ('BASE_URL            : ' + baseUrl);
+console.log ('MATRIX_TOKEN length : ' + matrix_token.length);
+console.log ('ROOM_ID             : ' + roomId);
+console.log ('ACCOUNT             : ' + account);
 
 const telosTrxStatus = () => {
   const messageBody = {
@@ -13,7 +20,7 @@ const telosTrxStatus = () => {
     "event": "subscribe",
     "type": "get_actions",
     "data": {
-      "account": "dao.hypha",
+      "account": account,
       "actions": []
     }
   }
@@ -22,21 +29,25 @@ const telosTrxStatus = () => {
   socket.onopen = () => {
     socket.send(JSON.stringify(messageBody));
   }
-
+ 
   socket.onmessage = (event) => {
-    console.log('Telos websocket:', JSON.parse(event.data))
     var d = new Date();
     const trxId = Math.round(d.getTime() / 1000);    // Send a POST request
+    const url = `${baseUrl}/${roomId}/send/m.room.message/${trxId}`
     axios({
       method: 'put',
-      url: `${baseUrl}/${roomId}/send/m.room.message/${trxId}`,
+      url: url,
       params: {
         access_token: matrix_token
       },
       data: {
         msgtype: 'm.text',
-        body: JSON.stringify(event.data, null, 2)
+        body: event.data
       }
+    }).then (function (response) {
+      // do nothing
+    }).catch (function (error) {
+      console.log (error);
     });
   }
   socket.onclose = (event) => {

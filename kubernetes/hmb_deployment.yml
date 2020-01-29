@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hypha-matrix-bot
+  labels:
+    app: hypha-matrix-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hypha-matrix-bot
+  template:
+    metadata:
+      labels:
+        app: hypha-matrix-bot
+    spec:
+      containers:
+      - name: hypha-matrix-bot
+        image: dsmaxds/hypha-matrix-bot
+        imagePullPolicy: "Always"
+        env:
+        - name: ROOM_ID
+          value: "!ukMsSSDxXXxPDtmRfV%3Ahypha.earth"
+        - name: BASE_URL
+          value: https://matrix.hypha.earth/_matrix/client/r0/rooms
+        - name: ACCOUNT
+          value: dao.hypha
+        - name: MATRIX_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hypha-matrix-room-secret
+              key: matrix-token
