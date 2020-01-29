@@ -1,2 +1,4 @@
 .env
 node_modules
+matrix_token.txt
+kubernetes/hmb_secret.yaml
