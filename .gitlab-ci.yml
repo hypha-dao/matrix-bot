@@ -1,30 +1,11 @@
 stages:
   - build
+  - deploy
 
 image: docker:latest
 
 variables:
-  # When using dind service, we need to instruct docker, to talk with
-  # the daemon started inside of the service. The daemon is available
-  # with a network connection instead of the default
-  # /var/run/docker.sock socket. docker:19.03.1 does this automatically
-  # by setting the DOCKER_HOST in
-  # https://github.com/docker-library/docker/blob/d45051476babc297257df490d22cbd806f1b11e4/19.03.1/docker-entrypoint.sh#L23-L29
-  #
-  # The 'docker' hostname is the alias of the service container as described at
-  # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services.
-  #
-  # Note that if you're using the Kubernetes executor, the variable
-  # should be set to tcp://localhost:2376 because of how the
-  # Kubernetes executor connects services to the job container
-  # DOCKER_HOST: tcp://localhost:2376
-  #
-  # Specify to Docker where to create the certificates, Docker will
-  # create them automatically on boot, and will create
-  # `/certs/client` that will be shared between the service and job
-  # container, thanks to volume mount from config.toml
   DOCKER_TLS_CERTDIR: "/certs"
-  # DOCKER_DRIVER: overlay
   CONTAINER_IMAGE: registry.gitlab.com/hypha/hypha-matrix-bot:${CI_COMMIT_SHORT_SHA}
   # IMAGE_NAME: “registry.gitlab.com/hypha/hypha-matrix-bot”
 
@@ -45,32 +26,16 @@ build:
     - docker tag ${CONTAINER_IMAGE} registry.gitlab.com/hypha/hypha-matrix-bot:latest
     - docker push ${CONTAINER_IMAGE}
 
-# deploy:
-#   stage: deploy
-#   image: dtzar/helm-kubectl
-#   script:
-#     - kubectl config set-cluster k8s --server="${SERVER}"
-#     - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
-#     - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
-#     - kubectl config set-context default --cluster=k8s --user=gitlab
-#     - kubectl config use-context default
-#     - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" deployment.yaml
-#     - kubectl apply -f deployment.yaml
-
-# k8s-deploy-Prod:
-#   image: lwolf/kubectl_deployer:latest
-#   services:
-#   — docker:dind
-#   stage: deploy
-#   script:
-#   — kubectl config set-cluster my-cluster — server=”$K8S_URL” — insecure-skip-tls-verify=true
-#   — kubectl config set-credentials admin — token=”$K8S_TOKEN”
-#   — kubectl config set-context default-context — cluster=my-cluster — user=admin
-#   — kubectl config use-context default-context
-#   — kubectl get cs
-#   — /bin/sh deploy.sh ${CI_BUILD_REF_NAME}_${CI_BUILD_REF} default tropicalhosting.com
-#   environment:
-#   name: production
-#   url: https://tropicalhosting.com
-#   only:
-#   — master
+deploy:
+  stage: deploy
+  only:
+    - master
+  image: dtzar/helm-kubectl
+  script:
+    - kubectl config set-cluster k8s --server="${SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
+    - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" kubernetes/deployment.yaml
+    - kubectl apply -f kubernetes/deployment.yaml

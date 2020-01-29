@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: hypha-matrix-bot
-        image: dsmaxds/hypha-matrix-bot
+        image: registry.gitlab.com/hypha/hypha-matrix-bot:<VERSION>
         imagePullPolicy: "Always"
         env:
         - name: ROOM_ID
