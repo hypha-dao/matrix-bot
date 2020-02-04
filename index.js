@@ -46,6 +46,7 @@ const telosTrxStatus = () => {
       }
     }).then (function (response) {
       // do nothing
+      console.log (JSON.stringify(response, null, 2));
     }).catch (function (error) {
       console.log (error);
     });
