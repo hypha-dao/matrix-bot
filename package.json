@@ -5,7 +5,7 @@
   "author": "Hypha",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
     "pm2": "^4.2.1",
